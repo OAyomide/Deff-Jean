@@ -1,9 +1,11 @@
- const express = require('express');
+const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const verify = process.env.VERIFY;
 const access = process.env.FB_ACCESS_TOKEN;
+const recastToken = process.env.RECAST_TOKEN;
 const app = express();
+const path = require('path');
 const recastai = require('recastai');
 const corefunctions = require('./models/corefunctions');
 const generic = require('./models/genericData');
@@ -15,6 +17,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '/public')));
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function(req, res){
@@ -80,51 +83,73 @@ function receivedMessage(event) {
   
 
   if (messageText) {
-    var reque = new recastai.request('5a2d09fe93ba5a0c3aeab5bd80299cbf');
+    var reque = new recastai.request(recastToken);
     reque.analyseText(messageText).then(function(res) {
       var intent = res.intent();
+      switch (intent.slug) {
+        case 'jeff_wiki':
+          generic.jeffWiki(senderID);
+          break;
+        
+          case 'jeff_academics':
+          jeffData.academicsReply(senderID);
+          break;
 
-      if (intent.slug === 'jeff_wiki') {
-        generic.jeffWiki(senderID);
-      } else if (intent.slug === 'jeff_academics') {
-        jeffData.academicsReply(senderID);
-      } else if (intent.slug === 'jeff_career') {
-        jeffData.careerReply(senderID);
-      } else if (intent.slug === 'jeff_image')  {
-        corefunctions.sendText('He looks like this: ', senderID);
+          case 'jeff_career':
+          jeffData.careerReply(senderID);
+          break;
+
+          case 'jeff_image':
+          corefunctions.sendText('He looks like this: ', senderID);
         setTimeout((err, res) => {
-          if (!err) {
-            jeffData.jeffImage(senderID);
-          }
-        }, 5000);
+            if (!err) {
+                jeffData.jeffImage(senderID);
+            }
+          }, 5000);
+          break;
+          
+          case 'jeff_personal_info':
+          corefunctions.sendText(senderID, 'He is 49 years old.');
+          break;
+
+          case 'jeff_enquiry':
+          generic.jeffWiki(senderID);
+          break;
+
+          case 'jefftruefact':
+          jeffFacts.jeffTrueFacts(senderID);
+          break;
+
+          case 'ask-joke':
+          jeffFacts.jeffGeneralUntrueFact(senderID);
+          break;
+
+          case 'jeffalgorithmjoke':
+          jeffFacts.jeffALgorithmFact(senderID);
+          break;
+
+          case 'jeff_socialmedia':
+          jeffFacts.jeffSocialMedia(senderID);
+          break;
+
+          case 'jeff_stackoverfow':
+          jeffFacts.jeffStackOverflow(senderID);
+          break;
+
+          case 'greetings':
+          jeffData.greetingReply(senderID);
+          break;
+
+          case 'goodbye':
+          jeffData.goodbyeReply(senderID);
+          break;
+
+          case 'ask-bot':
+          corefunctions.sendText(senderID, 'I am for real! and I am just a bot!🤖');
+          break;
       }
-      else if (intent.slug === 'jeff_personal_info') {
-        corefunctions.sendText(senderID, 'He is 49 years old');
-      }
-      else if (intent.slug === 'jeff_enquiry') {
-        generic.jeffWiki(senderID);
-      } else if (intent.slug === 'jefftruefact') {
-        jeffFacts.jeffTrueFacts(senderID);
-      }
-       else if (intent.slug === 'ask-joke') {
-         jeffFacts.jeffGeneralUntrueFact(senderID);
-       } else if (intent.slug === 'jeffalgorithmjoke') {
-         jeffFacts.jeffALgorithmFact(senderID);
-       } else if (intent.slug === 'jeff_socialmedia') {
-         jeffFacts.jeffSocialMedia(senderID);
-       } else if (intent.slug === 'jeff_stackoverflow') {
-         jeffFacts.jeffStackOverflow(senderID);
-       } else if (intent.slug === 'greetings') {
-         jeffData.greetingReply(senderID);
-       } else if (intent.slug==='goodbye') {
-         jeffData.goodbyeReply(senderID);
-       } else if (intent.slug === 'ask-bot') {
-         corefunctions.sendText(senderID, 'I am for real! and I am just a bot!🤖');
-       } else if (intent.slug === 'jeff_stackoverfow') {
-         jeffFacts.jeffStackOverflow(senderID);
-       } else if (intent.slug === 'quick-action') {
-         quickButtons(senderID);
-       }
+    }).catch((err) => {
+      corefunctions.sendText(senderID, '')
     })
 
     // If we receive a text message, check to see if it matches a keyword

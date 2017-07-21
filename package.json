@@ -1,0 +1,28 @@
+{
+  "name": "jeffdeanbot",
+  "version": "1.0.0",
+  "description": "a fun bot for jeff dean",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "jeffdeanbot repo"
+  },
+  "keywords": [
+    "jeffbot",
+    "bot",
+    "jeff",
+    "dean"
+  ],
+  "author": "Onigbinde Ayomide",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "recastai": "^3.4.1",
+    "request": "^2.81.0"
+  }
+}

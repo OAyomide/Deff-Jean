@@ -6,9 +6,11 @@ For Heroku: go to your terminal, navigate to the project folder and then type: `
 
 
  # TO DO
- 1. Develop a REST API for getting the data instead of getting directly from the arrays.
- 2. Cache the already displayed facts.
- 3. Use CRON JOB to get the user to receive daily facts at specific times
- 4. Track user session (the bot is stateless for now --it is very basic and quite untidy)
- 5. Train the bot by creating more intents based on the users' chat history.
- 6. Find a crate of beer, some chicken and toothpick!
+ 1. [Find out who Jeff Dean is](https://en.wikipedia.org/wiki/Jeff_Dean_(computer_scientist))
+ 2. Develop a REST API for getting the data instead of getting directly from the arrays.
+ 3. Cache the already displayed facts.
+ 4. Use CRON JOB to get the user to receive daily facts at specific times
+ 5. Track user session (the bot is stateless for now --it is very basic and quite untidy)
+ 6. Train the bot by creating more intents based on the users' chat history.
+ 7. Add speech analysis to the bot for speech understanding.
+ 8. Find a crate of beer, some chicken and toothpick! 
